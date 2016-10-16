@@ -26,8 +26,6 @@ import urllib
 import logging
 import re
 
-max_entries = 1000
-
 class StoredData(db.Model):
   tag = db.StringProperty()
   value = db.TextProperty()
@@ -36,30 +34,32 @@ class StoredData(db.Model):
 
 class StoreAValue(webapp2.RequestHandler):
 
-  def store_a_value(self, tag, value):
-  	store(tag, value)
+  def store_a_value(self, username, password, location):
+  	store(username, password)
+	store("Location"+username, location)
 	# call trimdb if you want to limit the size of db
   	# trimdb()
 	
 	## Send back a confirmation message.  The TinyWebDB component ignores
 	## the message (other than to note that it was received), but other
 	## components might use this.
-	result = ["STORED", tag, value]
+	result = ["STORED", username, password]
 	
 	## When I first implemented this, I used  json.JSONEncoder().encode(value)
 	## rather than json.dump.  That didn't work: the component ended up
 	## seeing extra quotation marks.  Maybe someone can explain this to me.
 	
 	if self.request.get('fmt') == "html":
-		WriteToWeb(self,tag,value)
+		WriteToWeb(self,username,password)
 	else:
-		WriteToPhoneAfterStore(self,tag,value)
+		WriteToPhoneAfterStore(self,username,password)
 	
 
   def post(self):
-	tag = self.request.get('tag')
-	value = self.request.get('value')
-	self.store_a_value(tag, value)
+	username = self.request.get('tag')
+	password = self.request.get('value')
+	location = self.request.get('location')	
+	self.store_a_value(tag, value, location)
 
 class DeleteEntry(webapp2.RequestHandler):
 
@@ -82,7 +82,8 @@ class GetValueHandler(webapp2.RequestHandler):
     entry = db.GqlQuery("SELECT * FROM StoredData where tag = :1", tag).get()
     if entry:
        value = entry.value
-    else: value = ""
+    else:
+       value = ""
   
     if self.request.get('fmt') == "html":
     	WriteToWeb(self,tag,value )
@@ -134,7 +135,8 @@ def WriteToPhoneAfterStore(handler,tag, value):
 
 ### A utility that guards against attempts to delete a non-existent object
 def dbSafeDelete(key):
-  if db.get(key) :	db.delete(key)
+  if db.get(key) :
+      db.delete(key)
   
 def store(tag, value, bCheckIfTagExists=True):
 	if bCheckIfTagExists:
