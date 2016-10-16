@@ -42,9 +42,9 @@ class StoreAValue(webapp2.RequestHandler):
 	Members = db.GqlQuery("SELECT * FROM StoredData where tag = 'Members"+location+"'").get()
 	if Members:
 		Members = Members.value
+		store("Members"+location, Members[:-1]+',"'+tag+'"]')
 	else:
-		Members = "[]"
-	store("Members"+location, Members[:-1]+',"'+tag+'"]')
+		store('["'+tag+'"]'
 	# call trimdb if you want to limit the size of db
   	# trimdb()
 	
