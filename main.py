@@ -113,15 +113,11 @@ class MainPage(webapp2.RequestHandler):
 #### Utilty procedures for generating the output
 
 def WriteToPhone(handler,tag,value):
- 
     handler.response.headers['Content-Type'] = 'application/jsonrequest'
     json.dump(["VALUE", tag, value], handler.response.out)
 
 def WriteToWeb(handler, tag,value):
-    entries = db.GqlQuery("SELECT * FROM StoredData ORDER BY date desc")
-    template_values={"result":  value,"entryList":entries}  
-    path = os.path.join(os.path.dirname(__file__),'index.html')
-    handler.response.out.write(template.render(path,template_values))
+    pass
 
 def WriteToPhoneAfterStore(handler,tag, value):
     handler.response.headers['Content-Type'] = 'application/jsonrequest'
