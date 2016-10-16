@@ -11,6 +11,7 @@
                   width: 20%;
                   height: 50px;
                   padding-left: 10px;
+                  font-size: 20px;
              }
              .smooth {
                   font-family: sans-serif;
@@ -25,6 +26,21 @@
              #create-account:hover {
                   background-color: lightgrey;
              }
+             #app-container {
+                  background-color: white;
+                  margin: 0px;
+                  opacity: 0.8;
+                  padding: 50px;
+                  color: darkgrey;
+             }
+             #app-icon {
+                  width: 300px;
+                  height: 300px;
+             }
+             #ratings {
+                  color: black;
+                  font-size: 25px;
+             }
           </style>
           <title>NUTS: Dating for the 21st Century</title>
      </head>
@@ -35,10 +51,36 @@
                <h3 class="smooth">Create An Account:</h3>
                <form action="/storeavalue" method="post" enctype=application/x-www-form-urlencoded class="smooth">
                     <p><input autocomplete="off" class = "smooth input-large" style="text-size: 25px;" placeholder="Username" type="text" name="tag" size="30"/></p>
-                    <p><input autocomplete="off" class = "smooth input-large" type="password" placeholder="Password"name="value" size="30"/></p>
+                    <p><input autocomplete="off" class = "smooth input-large" type="password" placeholder="Password" name="value" size="30"/></p>
+                    <select id="location" class="input-large" name="location">
+                         <option value="CA">California</option>
+                         <option value="NY">New York</option>
+                         <option value="OG">Oregon</option>
+                    </select>
+                    <br><br>
                     <input type="hidden" name="fmt" value="html">
                     <input type="submit" id="create-account" value="Create Account">
                </form>
           </center>
+          <div id="app-container">
+               <table>
+                    <tr>
+                         <td>
+                              <img id="app-icon" src="http://nuts-516.tk/AppIcon.png">
+                         </td>
+                         <td style="padding-left: 50px;">
+                              <h1 style="color:black;" class="smooth">Get the NUTS app today</h1>
+                              <p>
+                              <p style="color:black;width:60%;text-align:justify;" class="smooth">
+                                   Chat with the people you are attracted to like never before! Featuring
+                                   Material Design, and flat icons, you can date and get matched like never
+                                   before. Using our secure database, hosted on <strong>Google</strong>'s
+                                   servers, so you never have to worry about data leaks.
+                              </p>
+                              <br><br><br>
+                         </td>
+                    </tr>
+               </table>
+          </div>
      </body>
 </html>
