@@ -39,12 +39,6 @@ class StoreAValue(webapp2.RequestHandler):
   def store_a_value(self, tag, value, location):
   	store(tag, value)
 	store("Location"+tag, location)
-	OldMembers = db.GqlQuery("SELECT * FROM StoredData where tag = Members{}".format(location)).get()
-	if OldMembers:
-		OldMembers = OldMembers.value
-	else:
-		OldMembers = "[]"
-	store("Members" + location, OldMembers[:-1] + '"' + tag + '"]')
 	# call trimdb if you want to limit the size of db
   	# trimdb()
 	
