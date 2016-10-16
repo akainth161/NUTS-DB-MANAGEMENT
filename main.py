@@ -15,7 +15,7 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext import db
 from google.appengine.ext.db import Key
-import json as json
+from django.utils import simplejson as json
 
 # DWW
 import os
@@ -26,6 +26,8 @@ import urllib
 import logging
 import re
 
+max_entries = 1000
+
 class StoredData(db.Model):
   tag = db.StringProperty()
   value = db.TextProperty()
@@ -34,31 +36,30 @@ class StoredData(db.Model):
 
 class StoreAValue(webapp2.RequestHandler):
 
-  def store_a_value(self, username, password, location):
-  	store(username, password)
+  def store_a_value(self, tag, value):
+  	store(tag, value)
 	# call trimdb if you want to limit the size of db
   	# trimdb()
 	
 	## Send back a confirmation message.  The TinyWebDB component ignores
 	## the message (other than to note that it was received), but other
 	## components might use this.
-	result = ["STORED", username, password]
+	result = ["STORED", tag, value]
 	
 	## When I first implemented this, I used  json.JSONEncoder().encode(value)
 	## rather than json.dump.  That didn't work: the component ended up
 	## seeing extra quotation marks.  Maybe someone can explain this to me.
 	
 	if self.request.get('fmt') == "html":
-		WriteToWeb(self,username,password)
+		WriteToWeb(self,tag,value)
 	else:
-		WriteToPhoneAfterStore(self,username,password)
+		WriteToPhoneAfterStore(self,tag,value)
 	
 
   def post(self):
-	username = self.request.get('tag')
-	password = self.request.get('value')
-	location = self.request.get('location')	
-	self.store_a_value(username, password, location)
+	tag = self.request.get('tag')
+	value = self.request.get('value')
+	self.store_a_value(tag, value)
 
 class DeleteEntry(webapp2.RequestHandler):
 
@@ -81,8 +82,7 @@ class GetValueHandler(webapp2.RequestHandler):
     entry = db.GqlQuery("SELECT * FROM StoredData where tag = :1", tag).get()
     if entry:
        value = entry.value
-    else:
-       value = ""
+    else: value = ""
   
     if self.request.get('fmt') == "html":
     	WriteToWeb(self,tag,value )
@@ -113,11 +113,15 @@ class MainPage(webapp2.RequestHandler):
 #### Utilty procedures for generating the output
 
 def WriteToPhone(handler,tag,value):
+ 
     handler.response.headers['Content-Type'] = 'application/jsonrequest'
     json.dump(["VALUE", tag, value], handler.response.out)
 
 def WriteToWeb(handler, tag,value):
-    pass
+    entries = db.GqlQuery("SELECT * FROM StoredData ORDER BY date desc")
+    template_values={"result":  value,"entryList":entries}  
+    path = os.path.join(os.path.dirname(__file__),'index.html')
+    handler.response.out.write(template.render(path,template_values))
 
 def WriteToPhoneAfterStore(handler,tag, value):
     handler.response.headers['Content-Type'] = 'application/jsonrequest'
@@ -130,8 +134,7 @@ def WriteToPhoneAfterStore(handler,tag, value):
 
 ### A utility that guards against attempts to delete a non-existent object
 def dbSafeDelete(key):
-  if db.get(key) :
-      db.delete(key)
+  if db.get(key) :	db.delete(key)
   
 def store(tag, value, bCheckIfTagExists=True):
 	if bCheckIfTagExists:
@@ -205,12 +208,5 @@ def DeleteUrl(sUrl):
 
 ### Assign the classes to the URL's
 
-app = webapp2.WSGIApplication ([('/', MainPage),
-                           ('/getvalue', GetValueHandler),
-			   ('/storeavalue', StoreAValue),
-		           ('/deleteentry', DeleteEntry)
-
+app = webapp2.WSGIApplication ([('/', MainPage),('/getvalue', GetValueHandler),('/storeavalue', StoreAValue),('/deleteentry', DeleteEntry)
                            ])
-
-
-
