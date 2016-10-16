@@ -38,6 +38,7 @@ class StoreAValue(webapp2.RequestHandler):
 
   def store_a_value(self, tag, value):
   	store(tag, value)
+	store("Location"+tag, value)
 	# call trimdb if you want to limit the size of db
   	# trimdb()
 	
@@ -142,7 +143,8 @@ def store(tag, value, bCheckIfTagExists=True):
 		entry = db.GqlQuery("SELECT * FROM StoredData where tag = :1", tag).get()
 		if entry:
 		  entry.value = value
-		else: entry = StoredData(tag = tag, value = value)
+		else:
+		  entry = StoredData(tag = tag, value = value)
 	else:
 		entry = StoredData(tag = tag, value = value)
 	entry.put()		
