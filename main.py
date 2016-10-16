@@ -36,7 +36,6 @@ class StoreAValue(webapp2.RequestHandler):
 
   def store_a_value(self, username, password, location):
   	store(username, password)
-	store("Location"+username, location)
 	# call trimdb if you want to limit the size of db
   	# trimdb()
 	
