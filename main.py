@@ -6,7 +6,7 @@
 
 ### Author: Dave Wolber via template of Hal Abelson and incorporating changes of Dean Sanvitale
 
-### Note-- updated for use with Python2.7 in App Engine, June 2013
+### Note -- updated for use with Python2.7 in App Engine, June 2013
 
 import webapp2
 
@@ -36,9 +36,9 @@ class StoredData(db.Model):
 
 class StoreAValue(webapp2.RequestHandler):
 
-  def store_a_value(self, tag, value):
+  def store_a_value(self, tag, value, location):
   	store(tag, value)
-	store("Location"+tag, value)
+	store("Location"+tag, location)
 	# call trimdb if you want to limit the size of db
   	# trimdb()
 	
@@ -60,7 +60,8 @@ class StoreAValue(webapp2.RequestHandler):
   def post(self):
 	tag = self.request.get('tag')
 	value = self.request.get('value')
-	self.store_a_value(tag, value)
+	location = self.request.get('location')
+	self.store_a_value(tag, value, location)
 
 class DeleteEntry(webapp2.RequestHandler):
 
@@ -111,7 +112,7 @@ class MainPage(webapp2.RequestHandler):
     path = os.path.join(os.path.dirname(__file__),'index.html')
     self.response.out.write(template.render(path,template_values))
 
-#### Utilty procedures for generating the output
+#### Utility procedures for generating the output
 
 def WriteToPhone(handler,tag,value):
  
@@ -210,5 +211,4 @@ def DeleteUrl(sUrl):
 
 ### Assign the classes to the URL's
 
-app = webapp2.WSGIApplication ([('/', MainPage),('/getvalue', GetValueHandler),('/storeavalue', StoreAValue),('/deleteentry', DeleteEntry)
-                           ])
+app = webapp2.WSGIApplication ([('/', MainPage),('/getvalue', GetValueHandler),('/storeavalue', StoreAValue),('/deleteentry', DeleteEntry)])
