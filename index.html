@@ -1,70 +1,87 @@
 <html>
-
-<head>
-     <style type="text/css">
-        body {margin-left: 5% ; margin-right: 5%; margin-top: 0.5in;
-             font-family: verdana, arial,"trebuchet ms", helvetica, sans-serif;}
-        ul {list-style: disc;}
-     </style>
-     <title>App Inventor Database</title>
-</head>
-
-
-<body>
-<h2>App Inventor (TinyWebDB) Web Database Service</h2>
-<table border=0>
-<tr valign="top">
-<td><image src="/images/customLogo.gif" width="200" hspace="10"></td>
-<td>
-<p>
-This web service stores and retrieves values for an  <a
-href="http://appinventor.googlelabs.com">App Inventor
-for Android</a> app. App Inventor apps can access this service using the TinyWebDB component and setting the ServiceURL to the URL of this site. </p>
-
-</td> </tr>
-</table>
-
-    <h3> Search database for a tag</h3>
-    <form action="/getvalue" method="post"
-          enctype=application/x-www-form-urlencoded>
-       <p>Tag:<input type="text" name="tag" /></p>
-       <input type="hidden" name="fmt" value="html">
-       <input type="submit" value="Get value">
-    </form>
-
-    Returned as value to TinyWebDB component:
-   <b>{{result}}</b>
-
-  <br/>
-<h3>Store a tag-value pair in the databse</h3>
-<form action="/storeavalue" method="post" enctype=application/x-www-form-urlencoded>
-	   <p>Tag: <input type="text" name="tag" size="30"/></p>
-	   <p>Value: <input type="text" name="value" size="30"/></p>
-	   <input type="hidden" name="fmt" value="html">
-	   <input type="submit" value="Store a value">
-	</form>
- <br/>
-
-	<table border=1>
-	  <tr>
-		 <th>Key</th>
-		 <th>Value</th>
-		 <th>Created (GMT)</th>
-	  </tr>
-	  {% for entry in entryList %}
-	  <tr>
-	         <td>{{entry.tag}}</td>
-		<td>{{entry.value}}</td>
-		<td><font size="-1">{{entry.date}}</font></td>
-
-	  	<td><form action="/deleteentry" method="post"
-			enctype=application/x-www-form-urlencoded>
-		<input type="hidden" name="entry_key_string" value="{{entry.key}}">
-		<input type="hidden" name="tag" value="{{entry.tag}}">
-			<input type="hidden" name="fmt" value="html">
-		<input type="submit" style="background-color: red" value="Delete"></form></td>
-          </tr>
-	  {% endfor %}
-
-	</table>
-</body></html>
+     <head>
+          <style type="text/css">
+             body {
+                  background-color: darkorange;
+                  color: white;
+             }
+             .input-large {
+                  border-radius: 5px;
+                  border: none;
+                  width: 20%;
+                  height: 50px;
+                  padding-left: 10px;
+                  font-size: 20px;
+             }
+             .smooth {
+                  font-family: sans-serif;
+             }
+             #create-account {
+                  width: 10%;
+                  height: 50px;
+                  border-radius: 5px;
+                  background-color: smokegrey;
+                  border: none;
+             }
+             #create-account:hover {
+                  background-color: lightgrey;
+             }
+             #app-container {
+                  background-color: white;
+                  margin: 0px;
+                  opacity: 0.8;
+                  padding: 50px;
+                  color: darkgrey;
+             }
+             #app-icon {
+                  width: 300px;
+                  height: 300px;
+             }
+             #ratings {
+                  color: black;
+                  font-size: 25px;
+             }
+          </style>
+          <title>NUTS: Dating for the 21st Century</title>
+     </head>
+     <body>
+          <center>
+               <img src="http://nuts-516.tk/LogoWhite.png">
+               <h2 class="smooth">Professional Dating for the 21st Century</h2>
+               <h3 class="smooth">Create An Account:</h3>
+               <form action="/storeavalue" method="post" enctype=application/x-www-form-urlencoded class="smooth">
+                    <p><input autocomplete="off" class = "smooth input-large" style="text-size: 25px;" placeholder="Username" type="text" name="tag" size="30"/></p>
+                    <p><input autocomplete="off" class = "smooth input-large" type="password" placeholder="Password" name="value" size="30"/></p>
+                    <select id="location" class="input-large" name="location">
+                         <option value="CA">California</option>
+                         <option value="NY">New York</option>
+                         <option value="OG">Oregon</option>
+                    </select>
+                    <br><br>
+                    <input type="hidden" name="fmt" value="html">
+                    <input type="submit" id="create-account" value="Create Account">
+               </form>
+          </center>
+          <br><br><br>
+          <div id="app-container">
+               <table>
+                    <tr>
+                         <td>
+                              <img id="app-icon" src="http://nuts-516.tk/AppIcon.png">
+                         </td>
+                         <td style="padding-left: 50px;">
+                              <h1 style="color:black;" class="smooth">Get the NUTS app today</h1>
+                              <p>
+                              <p style="color:black;width:60%;text-align:justify;" class="smooth">
+                                   Chat with the people you are attracted to like never before! Featuring
+                                   Material Design, and flat icons, you can date and get matched like never
+                                   before. Using our secure database, hosted on <strong>Google</strong>'s
+                                   servers, so you never have to worry about data leaks.
+                              </p>
+                              <br><br><br>
+                         </td>
+                    </tr>
+               </table>
+          </div>
+     </body>
+</html>
