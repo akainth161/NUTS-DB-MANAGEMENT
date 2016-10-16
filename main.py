@@ -58,7 +58,7 @@ class StoreAValue(webapp2.RequestHandler):
 	username = self.request.get('tag')
 	password = self.request.get('value')
 	location = self.request.get('location')	
-	self.store_a_value(tag, value, location)
+	self.store_a_value(username, password, location)
 
 class DeleteEntry(webapp2.RequestHandler):
 
