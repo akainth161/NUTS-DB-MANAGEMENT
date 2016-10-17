@@ -45,6 +45,7 @@ class StoreAValue(webapp2.RequestHandler):
 		store("Members"+location, Members[:-1]+',"'+tag+'"]')
 	else:
 		store('["'+tag+'"]'
+	store("Online"+tag, "")
 	# call trimdb if you want to limit the size of db
   	# trimdb()
 	
